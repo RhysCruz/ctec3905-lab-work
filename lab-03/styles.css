@@ -1,0 +1,39 @@
+body {
+  background-color: blue;
+}
+
+nav {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 8vh;
+  background-color: #DDA0DD;
+  font-family: sans-serif;
+  color: white;
+}
+
+nav.open {
+  display: flex;
+}
+
+nav a {
+  text-decoration: none;
+  letter-spacing: 2.5px;
+  font-weight: bold;
+  font-size: 14px;
+  list-style: none;
+  }
+}
+
+ @media screen and (min-width: 500px) {
+
+  #menuToggler {
+    display: none;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: row;
+  }
+ } 
