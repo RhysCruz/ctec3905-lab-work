@@ -1,3 +1,7 @@
+let pageSize = 12;
+let currentPage;
+let objectIDs;
+
 async function loadObject(id) {
   const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`;
   response = await fetch(url);
@@ -47,5 +51,39 @@ async function loadSearch(query) {
 
 async function doSearch() {
   const result = await loadSearch(query.value);
-  result.objectIDs.forEach(insertArticle);
+  objectIDs = result.objectIDs || [];   // store the search result (or an empty list) in our variable
+  count.textContent = `found ${objectIDs.length} results for "${query.value}"`;
+  nPages.textContent = Math.ceil(objectIDs.length / pageSize);
+  currentPage = 1;     // set the currentPage
+  loadPage();          // load the appropriate page
 }
+
+query.addEventListener('change', doSearch);
+
+function clearResults() {
+  while(results.firstChild) {
+    results.firstChild.remove();
+  }
+}
+
+function loadPage() {
+  clearResults();
+  const myObjects = objectIDs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  myObjects.forEach(insertArticle);
+  pageIndicator.textContent = currentPage;
+}
+
+function nextPage() {
+  currentPage += 1;
+  const nPages = Math.ceil(objectIDs.length / pageSize);
+  if(currentPage > nPages) { currentPage = 1;}
+  loadPage();
+}
+function prevPage() {
+  currentPage -= 1;
+  const nPages = Math.ceil(objectIDs.length / pageSize);
+  if(currentPage < 1) { currentPage = nPages;}
+  loadPage();
+}
+prev.addEventListener('click', prevPage);
+next.addEventListener('click', nextPage);
